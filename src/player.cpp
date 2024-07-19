@@ -45,3 +45,11 @@ void Player::update_position(const short x, const short y){
     current_position.y += y;
     std:: cout << current_position.x << " " << current_position.y << "\n";
 }
+
+const short Player::get_xPosition() const{
+    return current_position.x;
+}
+
+const short Player::get_yPosition() const{
+    return current_position.y;
+}

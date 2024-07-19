@@ -131,7 +131,10 @@ int main(int argc, char* argv[]) {
             else{
               main_character.move(0,-0.25);
             }
-            if (main_character.get_y() < -ylimit){
+            if (main_character.get_yPosition() == 10 & main_character.get_y() < ylimit){
+              main_character.set_position(main_character.get_x(), ylimit);
+            }
+            else if (main_character.get_y() < -ylimit){
               main_character.set_position(main_character.get_x(), main_character.get_y() +SCRHEIGHT);
               main_character.update_position(0,1);
             }
@@ -144,7 +147,10 @@ int main(int argc, char* argv[]) {
               main_character.move(0,0.25);
             }
             main_character.move(0,0.25);
-            if (main_character.get_y() > SCRHEIGHT + ylimit){
+            if (main_character.get_yPosition() == -10 & main_character.get_y() > SCRHEIGHT - ylimit){
+              main_character.set_position(main_character.get_x(), SCRHEIGHT - ylimit);
+            }
+            else if (main_character.get_y() > SCRHEIGHT + ylimit){
               main_character.set_position(main_character.get_x(), main_character.get_y() -SCRHEIGHT);
               main_character.update_position(0,-1);
             }
@@ -156,8 +162,10 @@ int main(int argc, char* argv[]) {
             else{
               main_character.move(-0.25,0);
             }
-            
-            if (main_character.get_x() < -xlimit){
+            if (main_character.get_xPosition() == -10 & main_character.get_x() < xlimit){
+              main_character.set_position(xlimit, main_character.get_y());
+            }
+            else if (main_character.get_x() < -xlimit){
               main_character.set_position(main_character.get_x() + SCRWIDTH, main_character.get_y());
               main_character.update_position(-1,0);
             }
@@ -169,7 +177,10 @@ int main(int argc, char* argv[]) {
             else{
               main_character.move(0.25,0);
             }
-            if (main_character.get_x() > SCRWIDTH + xlimit){
+            if (main_character.get_xPosition() == 10 & main_character.get_x() > SCRWIDTH - xlimit){
+              main_character.set_position(SCRWIDTH - xlimit, main_character.get_y());
+            }
+            else if (main_character.get_x() > SCRWIDTH + xlimit){
               main_character.set_position(main_character.get_x() - SCRWIDTH, main_character.get_y());
               main_character.update_position(1,0);
             }

@@ -22,6 +22,8 @@ class Player{
         const float get_y() const;
         void move(float x, float y);
         void update_position(const short x, const short y);
+        const short get_xPosition() const;
+        const short get_yPosition() const;
 };
 
 #endif
