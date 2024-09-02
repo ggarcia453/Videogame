@@ -3,6 +3,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "inc/player.hpp"
+#include "inc/constants.hpp"
 
 typedef enum {TitleScreen, GameScreen, Questions} States;
 
@@ -13,7 +14,7 @@ void string_setup(sf::Text& text, std::string message, sf::Font& font){
   text.setCharacterSize(36); 
   text.setStyle(sf::Text::Bold);
   sf::FloatRect textRect = text.getLocalBounds();
-  text . setOrigin(textRect.left + textRect.width/2.0f,
+  text.setOrigin(textRect.left + textRect.width/2.0f,
                textRect.top  + textRect.height/2.0f);
 }
 
@@ -29,6 +30,8 @@ int main(int argc, char* argv[]) {
   sf::Text text5;
   sf::Texture Texture1;
   sf::Sprite Sprite1;
+  sf::Texture Texture2;
+  sf::Sprite SPrite2;
   if (!Titlemusic.openFromFile("../assets/music/fnaf_title.ogg")){
     return -1;
   }
@@ -43,8 +46,6 @@ int main(int argc, char* argv[]) {
   }
 
   //Window set up
-  const short SCRWIDTH = 500; 
-  const short SCRHEIGHT = 420;
   sf::RenderWindow window(sf::VideoMode(SCRWIDTH, SCRHEIGHT), "videoagme");
 
   //Title Screen text Set up   
@@ -69,9 +70,9 @@ int main(int argc, char* argv[]) {
 
   //Sprite Setup
   Player main_character(&Sprite1, Texture1);
-  main_character.set_position(SCRWIDTH/2.0f ,SCRHEIGHT/2.0f); 
   const int xlimit = main_character.get_xlimit();
   const int ylimit = main_character.get_ylimit();
+  main_character.set_position(xlimit ,SCRHEIGHT - ylimit); 
 
   //State Setup
   States curState = TitleScreen;
@@ -124,67 +125,7 @@ int main(int argc, char* argv[]) {
         case GameScreen:
           if(Titlemusic.getStatus() != 0){Titlemusic.stop();}
           if(Gamemusic.getStatus() != 2){Gamemusic.play();}
-          if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
-              main_character.move(0,-0.5);
-            }
-            else{
-              main_character.move(0,-0.25);
-            }
-            if (main_character.get_yPosition() == 10 & main_character.get_y() < ylimit){
-              main_character.set_position(main_character.get_x(), ylimit);
-            }
-            else if (main_character.get_y() < -ylimit){
-              main_character.set_position(main_character.get_x(), main_character.get_y() +SCRHEIGHT);
-              main_character.update_position(0,1);
-            }
-          }
-          if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
-              main_character.move(0,0.5);
-            }
-            else{
-              main_character.move(0,0.25);
-            }
-            main_character.move(0,0.25);
-            if (main_character.get_yPosition() == -10 & main_character.get_y() > SCRHEIGHT - ylimit){
-              main_character.set_position(main_character.get_x(), SCRHEIGHT - ylimit);
-            }
-            else if (main_character.get_y() > SCRHEIGHT + ylimit){
-              main_character.set_position(main_character.get_x(), main_character.get_y() -SCRHEIGHT);
-              main_character.update_position(0,-1);
-            }
-          }
-          if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
-              main_character.move(-0.5,0);
-            }
-            else{
-              main_character.move(-0.25,0);
-            }
-            if (main_character.get_xPosition() == -10 & main_character.get_x() < xlimit){
-              main_character.set_position(xlimit, main_character.get_y());
-            }
-            else if (main_character.get_x() < -xlimit){
-              main_character.set_position(main_character.get_x() + SCRWIDTH, main_character.get_y());
-              main_character.update_position(-1,0);
-            }
-          }
-          if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
-              main_character.move(0.5,0);
-            }
-            else{
-              main_character.move(0.25,0);
-            }
-            if (main_character.get_xPosition() == 10 & main_character.get_x() > SCRWIDTH - xlimit){
-              main_character.set_position(SCRWIDTH - xlimit, main_character.get_y());
-            }
-            else if (main_character.get_x() > SCRWIDTH + xlimit){
-              main_character.set_position(main_character.get_x() - SCRWIDTH, main_character.get_y());
-              main_character.update_position(1,0);
-            }
-          }
+          main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());
           window.display();

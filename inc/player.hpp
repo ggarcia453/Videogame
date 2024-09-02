@@ -11,6 +11,7 @@ class Player{
     private:
         position current_position;            
         sf::Sprite* main_sprite;
+        void bound_check();
     public:
 
         Player(sf::Sprite* m, sf::Texture& Texture1);
@@ -20,7 +21,7 @@ class Player{
         void set_position(float x, float y);
         const float get_x() const;
         const float get_y() const;
-        void move(float x, float y);
+        void move();
         void update_position(const short x, const short y);
         const short get_xPosition() const;
         const short get_yPosition() const;

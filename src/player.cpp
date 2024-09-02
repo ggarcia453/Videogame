@@ -1,8 +1,41 @@
 #include "../inc/player.hpp"
 #include <iostream>
+#include "../inc/constants.hpp"
+#include <SFML/Window/Keyboard.hpp>
+
+void Player::bound_check(){
+    if (this ->current_position.y == 25 & this ->get_y() < this->get_ylimit()){
+        this ->set_position(this ->get_x(), this->get_ylimit());
+    }
+    else if (this ->get_y() < -this->get_ylimit()){
+        this ->set_position(this ->get_x(), this ->get_y() +SCRHEIGHT);
+        this ->update_position(0,1);
+    }
+    if (this ->current_position.y == 1 & this ->get_y() > SCRHEIGHT - this->get_ylimit()){
+        this ->set_position(this ->get_x(), SCRHEIGHT - this->get_ylimit());
+    }
+    else if (this ->get_y() > SCRHEIGHT + this->get_ylimit()){
+        this ->set_position(this ->get_x(), this ->get_y() -SCRHEIGHT);
+        this ->update_position(0,-1);
+    }
+    if (this ->current_position.x == 1 & this ->get_x() < this->get_xlimit()){
+        this ->set_position(this->get_xlimit(), this ->get_y());
+    }
+    else if (this ->get_x() < -this->get_xlimit()){
+        this ->set_position(this ->get_x() + SCRWIDTH, this ->get_y());
+        this ->update_position(-1,0);
+    }
+    if (this ->current_position.x == 25 & this ->get_x() > SCRWIDTH - this->get_xlimit()){
+        this ->set_position(SCRWIDTH - this->get_xlimit(), this ->get_y());
+    }
+    else if (this ->get_x() > SCRWIDTH + this->get_xlimit()){
+        this ->set_position(this ->get_x() - SCRWIDTH, this ->get_y());
+        this ->update_position(1,0);
+    }
+}
 
 Player::Player(sf::Sprite* m, sf::Texture& Texture1)
-:main_sprite{m}, current_position{0,0}
+:main_sprite{m}, current_position{1,1}
 {
     main_sprite->setTexture(Texture1);
     main_sprite->setScale(0.105, 0.105);
@@ -27,8 +60,39 @@ void Player::set_position(float x, float y){
     main_sprite->setPosition(x,y);
 }
 
-void Player::move(float x, float y){
-    main_sprite->move(x,y);
+void Player::move(){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+            main_sprite->move(0,-0.75);
+         } else{
+             main_sprite->move(0,-0.25);
+        }
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+            main_sprite->move(0,0.75);
+        }
+        else{
+            main_sprite->move(0,0.25);
+            }
+        }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+            main_sprite->move(-0.75,0);
+        }
+        else{
+            main_sprite->move(-0.25,0);
+        }
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+            main_sprite->move(0.75,0);
+        }
+        else{
+            main_sprite->move(0.25,0);
+        }
+    }
+    this->bound_check();
 }
 
 
@@ -43,7 +107,6 @@ const float Player:: get_y() const{
 void Player::update_position(const short x, const short y){
     current_position.x += x;
     current_position.y += y;
-    std:: cout << current_position.x << " " << current_position.y << "\n";
 }
 
 const short Player::get_xPosition() const{
