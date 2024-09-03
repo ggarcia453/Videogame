@@ -12,8 +12,8 @@ endif()
 project(videogame)
 
 # Set version information in a config.h file
-set(videogame_VERSION_MAJOR 1)
-set(videogame_VERSION_MINOR 0)
+set(videogame_VERSION_MAJOR 0)
+set(videogame_VERSION_MINOR 1)
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
@@ -53,7 +53,6 @@ install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_VERSION_MAJOR "${videogame_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${videogame_VERSION_MINOR}")
 include(CPack)

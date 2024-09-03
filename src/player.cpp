@@ -4,33 +4,33 @@
 #include <SFML/Window/Keyboard.hpp>
 
 void Player::bound_check(){
-    if (this ->current_position.y == 25 & this ->get_y() < this->get_ylimit()){
-        this ->set_position(this ->get_x(), this->get_ylimit());
+    if (current_position.y == 25 & get_y() < get_ylimit()){
+        main_sprite->setPosition(get_x(), get_ylimit());
     }
-    else if (this ->get_y() < -this->get_ylimit()){
-        this ->set_position(this ->get_x(), this ->get_y() +SCRHEIGHT);
-        this ->update_position(0,1);
+    else if (get_y() < -get_ylimit()){
+        main_sprite->setPosition(get_x(), get_y() +SCRHEIGHT);
+        update_position(0,1);
     }
-    if (this ->current_position.y == 1 & this ->get_y() > SCRHEIGHT - this->get_ylimit()){
-        this ->set_position(this ->get_x(), SCRHEIGHT - this->get_ylimit());
+    if (current_position.y == 1 & get_y() > SCRHEIGHT - get_ylimit()){
+        main_sprite->setPosition(get_x(), SCRHEIGHT - get_ylimit());
     }
-    else if (this ->get_y() > SCRHEIGHT + this->get_ylimit()){
-        this ->set_position(this ->get_x(), this ->get_y() -SCRHEIGHT);
-        this ->update_position(0,-1);
+    else if (get_y() > SCRHEIGHT + get_ylimit()){
+        main_sprite->setPosition(get_x(), get_y() -SCRHEIGHT);
+        update_position(0,-1);
     }
-    if (this ->current_position.x == 1 & this ->get_x() < this->get_xlimit()){
-        this ->set_position(this->get_xlimit(), this ->get_y());
+    if (current_position.x == 1 & get_x() < get_xlimit()){
+        main_sprite->setPosition(get_xlimit(), get_y());
     }
-    else if (this ->get_x() < -this->get_xlimit()){
-        this ->set_position(this ->get_x() + SCRWIDTH, this ->get_y());
-        this ->update_position(-1,0);
+    else if (get_x() < -get_xlimit()){
+        main_sprite->setPosition(get_x() + SCRWIDTH, get_y());
+        update_position(-1,0);
     }
-    if (this ->current_position.x == 25 & this ->get_x() > SCRWIDTH - this->get_xlimit()){
-        this ->set_position(SCRWIDTH - this->get_xlimit(), this ->get_y());
+    if (current_position.x == 25 & get_x() > SCRWIDTH - get_xlimit()){
+        main_sprite->setPosition(SCRWIDTH - get_xlimit(), get_y());
     }
-    else if (this ->get_x() > SCRWIDTH + this->get_xlimit()){
-        this ->set_position(this ->get_x() - SCRWIDTH, this ->get_y());
-        this ->update_position(1,0);
+    else if (get_x() > SCRWIDTH + get_xlimit()){
+        main_sprite->setPosition(get_x() - SCRWIDTH, get_y());
+        update_position(1,0);
     }
 }
 
@@ -40,6 +40,7 @@ Player::Player(sf::Sprite* m, sf::Texture& Texture1)
     main_sprite->setTexture(Texture1);
     main_sprite->setScale(0.105, 0.105);
     main_sprite->setOrigin(main_sprite->getLocalBounds().width / 2.f, main_sprite->getLocalBounds().height / 2.f);  
+    main_sprite->setPosition(get_xlimit() ,SCRHEIGHT - get_ylimit()); 
 }
 
 
@@ -54,10 +55,6 @@ const int Player::get_xlimit() const{
 
 const int Player::get_ylimit() const{
     return main_sprite->getTexture()->getSize().y * main_sprite->getScale().y /2;
-}
-
-void Player::set_position(float x, float y){
-    main_sprite->setPosition(x,y);
 }
 
 void Player::move(){
@@ -92,7 +89,7 @@ void Player::move(){
             main_sprite->move(0.25,0);
         }
     }
-    this->bound_check();
+    bound_check();
 }
 
 

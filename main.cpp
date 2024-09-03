@@ -5,8 +5,6 @@
 #include "inc/player.hpp"
 #include "inc/constants.hpp"
 
-typedef enum {TitleScreen, GameScreen, Questions} States;
-
 void string_setup(sf::Text& text, std::string message, sf::Font& font){
   text.setFont(font);
   text.setString(message);
@@ -31,7 +29,8 @@ int main(int argc, char* argv[]) {
   sf::Texture Texture1;
   sf::Sprite Sprite1;
   sf::Texture Texture2;
-  sf::Sprite SPrite2;
+  sf::Sprite Sprite2;
+  bool buffer = false;
   if (!Titlemusic.openFromFile("../assets/music/fnaf_title.ogg")){
     return -1;
   }
@@ -70,9 +69,6 @@ int main(int argc, char* argv[]) {
 
   //Sprite Setup
   Player main_character(&Sprite1, Texture1);
-  const int xlimit = main_character.get_xlimit();
-  const int ylimit = main_character.get_ylimit();
-  main_character.set_position(xlimit ,SCRHEIGHT - ylimit); 
 
   //State Setup
   States curState = TitleScreen;
@@ -89,15 +85,22 @@ int main(int argc, char* argv[]) {
         switch (curState)
         {
         case TitleScreen:
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+        //Check for exit
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) and not buffer){
             return EXIT_SUCCESS;
-          }
+        }
+        else if (not sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+          buffer = false;
+        }
+        //Set Up text bubbles
           text1.setPosition(sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f - SCRHEIGHT/4.0f));
           text2.setPosition(sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f));
           text3.setPosition(sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/3.0f ));
+          //Play Music
           if (Titlemusic.getStatus() != 2){
               Titlemusic.play();
             }
+          //Go to Settings or Gameplay
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
             nextState = Questions;
           }
@@ -116,6 +119,7 @@ int main(int argc, char* argv[]) {
           text5.setPosition(sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f));
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
             nextState = TitleScreen;
+            buffer = true;
           }
           window.clear();
           window.draw(text4);
@@ -125,6 +129,7 @@ int main(int argc, char* argv[]) {
         case GameScreen:
           if(Titlemusic.getStatus() != 0){Titlemusic.stop();}
           if(Gamemusic.getStatus() != 2){Gamemusic.play();}
+          //Check for character movement. See Player.hpp/Player.cpp
           main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());

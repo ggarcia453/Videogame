@@ -12,19 +12,18 @@ class Player{
         position current_position;            
         sf::Sprite* main_sprite;
         void bound_check();
+        void update_position(const short x, const short y);
     public:
 
         Player(sf::Sprite* m, sf::Texture& Texture1);
         const sf::Sprite get_sprite() const;
-        const int get_xlimit() const;
-        const int get_ylimit() const;
-        void set_position(float x, float y);
         const float get_x() const;
         const float get_y() const;
         void move();
-        void update_position(const short x, const short y);
         const short get_xPosition() const;
         const short get_yPosition() const;
+        const int get_xlimit() const;
+        const int get_ylimit() const;
 };
 
 #endif
