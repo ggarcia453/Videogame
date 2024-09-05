@@ -4,7 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 void Player::bound_check(){
-    if (current_position.y == 25 & get_y() < get_ylimit()){
+    if (current_position.y == 10 & get_y() < get_ylimit()){
         main_sprite->setPosition(get_x(), get_ylimit());
     }
     else if (get_y() < -get_ylimit()){
@@ -25,7 +25,7 @@ void Player::bound_check(){
         main_sprite->setPosition(get_x() + SCRWIDTH, get_y());
         update_position(-1,0);
     }
-    if (current_position.x == 25 & get_x() > SCRWIDTH - get_xlimit()){
+    if (current_position.x == 10 & get_x() > SCRWIDTH - get_xlimit()){
         main_sprite->setPosition(SCRWIDTH - get_xlimit(), get_y());
     }
     else if (get_x() > SCRWIDTH + get_xlimit()){
@@ -35,7 +35,7 @@ void Player::bound_check(){
 }
 
 Player::Player(sf::Sprite* m, sf::Texture& Texture1)
-:main_sprite{m}, current_position{1,1}
+:main_sprite{m}, current_position{1,1}, level{1}
 {
     main_sprite->setTexture(Texture1);
     main_sprite->setScale(0.105, 0.105);
@@ -113,3 +113,5 @@ const short Player::get_xPosition() const{
 const short Player::get_yPosition() const{
     return current_position.y;
 }
+
+Player::~Player(){};

@@ -20,7 +20,8 @@ configure_file(
   )
 include_directories("${PROJECT_BINARY_DIR}")
 
-file(GLOB SRC_FILES CONFIGURE_DEPENDS inc/*.hpp src/*.cpp)
+# file(GLOB SRC_FILES CONFIGURE_DEPENDS inc/*.hpp src/*.cpp)
+set(SRC_FILES inc/constants.hpp inc/items.hpp inc/player.hpp inc/settings.hpp src/items.cpp src/player.cpp src/settings.cpp)
 
 # Define sources and executable
 set(EXECUTABLE_NAME "videogame")

@@ -1,6 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 struct position{
     short x;
@@ -13,9 +14,12 @@ class Player{
         sf::Sprite* main_sprite;
         void bound_check();
         void update_position(const short x, const short y);
+        short level;
+        
     public:
 
         Player(sf::Sprite* m, sf::Texture& Texture1);
+        ~Player();
         const sf::Sprite get_sprite() const;
         const float get_x() const;
         const float get_y() const;

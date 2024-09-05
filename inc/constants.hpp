@@ -4,6 +4,6 @@
 const short SCRWIDTH = 420; 
 const short SCRHEIGHT = 420;
 
-typedef enum {TitleScreen, GameScreen, Questions} States;
+typedef enum {LoadingScreen, TitleScreen, PauseScreen, GameScreen, Questions} States;
 
 #endif
