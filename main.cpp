@@ -8,6 +8,44 @@
 #include <thread>
 sf::Mutex mutex;
 
+States state_handler(States current, sf::Keyboard::Key key){
+  if (key == sf::Keyboard::Escape){
+    switch (current){
+    case PauseScreen:
+      return GameScreen;
+    case GameScreen:
+      return PauseScreen;
+    case Questions:
+      return TitleScreen;
+    case TitleScreen:
+      return Exit;
+    default:
+      return current;
+    }
+  }
+  else if (key == sf::Keyboard::Q){
+    switch (current){
+      case PauseScreen:
+        return Exit;
+      case TitleScreen:
+        return Questions;    
+    default:
+      return current;
+    }
+  }
+  else if (key == sf::Keyboard::P){
+    switch (current)
+    {
+    case TitleScreen:
+      return GameScreen;
+    default:
+      return current;
+    }
+  }
+  else {
+  return current;}
+}
+
 void string_setup(sf::Text* text, std::string message, sf::Font& font, sf::Vector2f v){
   mutex.lock();
   text->setFont(font);
@@ -103,33 +141,23 @@ int main(int argc, char* argv[]) {
   //State Setup
   States curState = TitleScreen;
   States nextState = TitleScreen;
-
+  t1.wait();
+  t2.wait();
+  t3.wait();
   while (window.isOpen()){
     sf::Event event;
     while (window.pollEvent(event)){
-      if (event.type == sf::Event::Closed)
-        window.close();
+      if (event.type == sf::Event::Closed){window.close();}
+      if (event.type == sf::Event::KeyReleased){
+        nextState = state_handler(curState, event.key.code);
+      }
     }
     switch (curState){
       case TitleScreen:
-        //Check for exit
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) and not buffer){
-            return EXIT_SUCCESS;
-        }
-        else if (not sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-          buffer = false;
-        }
           //Play Music
           if (Titlemusic.getStatus() != 2 && settings.playMusic()){
               Titlemusic.play();
             }
-          //Go to Settings or Gameplay
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-            nextState = Questions;
-          }
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
-            nextState =GameScreen;
-          }
           window.clear();
           window.draw(text1);
           window.draw(text2);
@@ -138,10 +166,6 @@ int main(int argc, char* argv[]) {
           break;
         case Questions:
           if(Titlemusic.getStatus() == 2){Titlemusic.pause();}
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-            nextState = TitleScreen;
-            buffer = true;
-          }
           if (settings.playMusic()){
             text7.setString("M to change music. Its On");
           }
@@ -159,14 +183,6 @@ int main(int argc, char* argv[]) {
           if(Titlemusic.getStatus() != 0){Titlemusic.stop();}
           if(Gamemusic.getStatus() !=2 && settings.playMusic()){Gamemusic.play();}
           text6.setString(std::to_string(main_character.get_xPosition()) + "," + std::to_string(main_character.get_yPosition()));
-          //Check for character movement. See Player.hpp/Player.cpp
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !buffer){
-            nextState = PauseScreen;
-            buffer = true;
-          }
-          else if (not sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-            buffer = false;
-          }
           main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());
@@ -175,19 +191,13 @@ int main(int argc, char* argv[]) {
           break;
         case PauseScreen:
           if (Gamemusic.getStatus() == 2){Gamemusic.pause();}
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){return EXIT_SUCCESS;}
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) and not buffer){
-            buffer = true;
-            nextState = GameScreen;
-          }
-          else if (not sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-            buffer = false;
-          }
           text1.setString("Paused");
           window.clear();
           window.draw(text1);
           window.display();
           break;
+        case Exit:
+          return EXIT_SUCCESS;
         default:
           std:: cerr << "SOmething is off" << std:: endl;
           return EXIT_FAILURE;
