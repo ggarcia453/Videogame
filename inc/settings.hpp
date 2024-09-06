@@ -4,10 +4,10 @@
 class Settings{
     private:
         bool musicOn;
-
+        bool buffer;
     public:
-        // Settings();
-        // void check_changes();
+        Settings();
+        void check_changes();
         const bool playMusic() const;
 
 };

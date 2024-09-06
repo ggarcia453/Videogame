@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
   sf::Text text4;
   sf::Text text5;
   sf::Text text6;
+  sf::Text text7;
   sf::Texture Texture1;
   sf::Sprite Sprite1;
   sf::Texture Texture2;
@@ -84,33 +85,33 @@ int main(int argc, char* argv[]) {
   t5.launch();
   // string_setup(&text5, "Esc to stop questions", font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f));
 
+  //text7 setup 
+  sf::Thread t7(std::bind(&string_setup, &text7, "M to change music. Its On", font, sf::Vector2f(SCRWIDTH/2.0f, SCRHEIGHT/2.0f - SCRHEIGHT/5.0f + 2)));
+  t7.launch();
+
+  //Sprite Setup
+  Player main_character(&Sprite1, Texture1);
+  sf::Thread t6(std::bind(&string_setup, &text6, std::to_string(main_character.get_xPosition()) + "," + std::to_string(main_character.get_yPosition()), font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f)));
+  t6.launch();
+  // string_setup(&text6, pos_string, font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f));
+
   //Titlemusic set up  
   Titlemusic.setLoop(true);
   Titlemusic.play();
   Gamemusic.setLoop(true);
 
-  //Sprite Setup
-  Player main_character(&Sprite1, Texture1);
-  std::string pos_string  = std::to_string(main_character.get_xPosition()) + "," + std::to_string(main_character.get_yPosition());
-  sf::Thread t6(std::bind(&string_setup, &text6, pos_string, font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f)));
-  t6.launch();
-  // string_setup(&text6, pos_string, font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f));
-
   //State Setup
   States curState = TitleScreen;
   States nextState = TitleScreen;
 
-   while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-          if (event.type == sf::Event::Closed)
-            window.close();
-        }
-        switch (curState)
-        {
-        case TitleScreen:
+  while (window.isOpen()){
+    sf::Event event;
+    while (window.pollEvent(event)){
+      if (event.type == sf::Event::Closed)
+        window.close();
+    }
+    switch (curState){
+      case TitleScreen:
         //Check for exit
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) and not buffer){
             return EXIT_SUCCESS;
@@ -141,9 +142,17 @@ int main(int argc, char* argv[]) {
             nextState = TitleScreen;
             buffer = true;
           }
+          if (settings.playMusic()){
+            text7.setString("M to change music. Its On");
+          }
+          else{
+            text7.setString("M to change music. Its Off");
+          }
+          settings.check_changes();
           window.clear();
           window.draw(text4);
           window.draw(text5);
+          window.draw(text7);
           window.display();
           break;
         case GameScreen:
@@ -151,10 +160,32 @@ int main(int argc, char* argv[]) {
           if(Gamemusic.getStatus() !=2 && settings.playMusic()){Gamemusic.play();}
           text6.setString(std::to_string(main_character.get_xPosition()) + "," + std::to_string(main_character.get_yPosition()));
           //Check for character movement. See Player.hpp/Player.cpp
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !buffer){
+            nextState = PauseScreen;
+            buffer = true;
+          }
+          else if (not sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+            buffer = false;
+          }
           main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());
           window.draw(text6);
+          window.display();
+          break;
+        case PauseScreen:
+          if (Gamemusic.getStatus() == 2){Gamemusic.pause();}
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){return EXIT_SUCCESS;}
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) and not buffer){
+            buffer = true;
+            nextState = GameScreen;
+          }
+          else if (not sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+            buffer = false;
+          }
+          text1.setString("Paused");
+          window.clear();
+          window.draw(text1);
           window.display();
           break;
         default:
