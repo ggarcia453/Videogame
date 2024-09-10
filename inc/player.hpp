@@ -15,6 +15,9 @@ class Player{
         void bound_check();
         void update_position(const short x, const short y);
         short level;
+        void move_arrows();
+        void move_wasd();
+        bool wasd;
         
     public:
 
@@ -28,6 +31,7 @@ class Player{
         const short get_yPosition() const;
         const int get_xlimit() const;
         const int get_ylimit() const;
+        void set_wasd(const bool newwasd);
 };
 
 #endif

@@ -26,7 +26,7 @@ States state_handler(States current, sf::Keyboard::Key key){
   else if (key == sf::Keyboard::Q){
     switch (current){
       case PauseScreen:
-        return Exit;
+        return TitleScreen;
       case TitleScreen:
         return Questions;    
     default:
@@ -73,6 +73,7 @@ int main(int argc, char* argv[]) {
   sf::Text text5;
   sf::Text text6;
   sf::Text text7;
+  sf::Text text8;
   sf::Texture Texture1;
   sf::Sprite Sprite1;
   sf::Texture Texture2;
@@ -127,6 +128,9 @@ int main(int argc, char* argv[]) {
   sf::Thread t7(std::bind(&string_setup, &text7, "M to change music. Its On", font, sf::Vector2f(SCRWIDTH/2.0f, SCRHEIGHT/2.0f - SCRHEIGHT/5.0f + 2)));
   t7.launch();
 
+  sf::Thread t8(std::bind(&string_setup, &text8, "W to play with WASD", font, sf::Vector2f(SCRWIDTH/2.0f, SCRHEIGHT/2.0f)));
+  t8.launch();
+
   //Sprite Setup
   Player main_character(&Sprite1, Texture1);
   sf::Thread t6(std::bind(&string_setup, &text6, std::to_string(main_character.get_xPosition()) + "," + std::to_string(main_character.get_yPosition()), font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f)));
@@ -149,12 +153,17 @@ int main(int argc, char* argv[]) {
     while (window.pollEvent(event)){
       if (event.type == sf::Event::Closed){window.close();}
       if (event.type == sf::Event::KeyReleased){
+        if (curState == Questions){
+          settings.check_changes(event.key.code);
+          main_character.set_wasd(settings.CharMove());
+        }
         nextState = state_handler(curState, event.key.code);
       }
     }
     switch (curState){
       case TitleScreen:
           //Play Music
+          text1.setString("Title Screen");
           if (Titlemusic.getStatus() != 2 && settings.playMusic()){
               Titlemusic.play();
             }
@@ -172,11 +181,17 @@ int main(int argc, char* argv[]) {
           else{
             text7.setString("M to change music. Its Off");
           }
-          settings.check_changes();
+          if (!settings.CharMove()){
+            text8.setString("W to play with WASD");
+          }
+          else{
+            text8.setString("W to play with arrows");
+          }
           window.clear();
           window.draw(text4);
           window.draw(text5);
           window.draw(text7);
+          window.draw(text8);
           window.display();
           break;
         case GameScreen:

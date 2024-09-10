@@ -3,20 +3,23 @@
 #include <iostream>
 
 Settings::Settings()
-:musicOn{true}, buffer{false}
+:musicOn{true}, arrows_wasd{false}
 {
 }
 
-void Settings::check_changes(){
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) && not buffer){
-        buffer = true;
+void Settings::check_changes(sf::Keyboard::Key k){
+    if (k == sf::Keyboard::M){
         musicOn = !musicOn;
     }
-    else if (! sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
-        buffer = false;
+    if (k == sf::Keyboard::W){
+        arrows_wasd = !arrows_wasd;
     }
 }
 
 const bool Settings::playMusic() const{
     return musicOn;
+}
+
+const bool Settings::CharMove() const{
+    return arrows_wasd;
 }
