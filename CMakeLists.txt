@@ -57,3 +57,27 @@ include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_VERSION_MAJOR "${videogame_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${videogame_VERSION_MINOR}")
 include(CPack)
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+
+
+enable_testing()  
+set(TEST_FILES test/backendtests.cpp test/playertests.cpp test/settingtests.cpp)
+add_executable(
+  tester
+  ${TEST_FILES}
+  ${SRC_FILES}
+)
+target_link_libraries(tester GTest::gtest_main)
+target_link_libraries(tester sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
+
+include(GoogleTest)
+gtest_discover_tests(tester)

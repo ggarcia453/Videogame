@@ -112,7 +112,11 @@ Player::Player(sf::Sprite* m, sf::Texture& Texture1)
     main_sprite->setOrigin(main_sprite->getLocalBounds().width / 2.f, main_sprite->getLocalBounds().height / 2.f);  
     main_sprite->setPosition(get_xlimit() ,SCRHEIGHT - get_ylimit()); 
 }
+Player::Player()
+:main_sprite{nullptr}, current_position{1,1}, level{1}, wasd{false}
+{
 
+}
 
 const sf::Sprite Player::get_sprite() const{
     return *main_sprite;

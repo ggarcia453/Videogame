@@ -18,20 +18,22 @@ class Player{
         void move_arrows();
         void move_wasd();
         bool wasd;
+        const float get_x() const;
+        const float get_y() const;
         
     public:
 
+        Player();
         Player(sf::Sprite* m, sf::Texture& Texture1);
         ~Player();
         const sf::Sprite get_sprite() const;
-        const float get_x() const;
-        const float get_y() const;
         void move();
         const short get_xPosition() const;
         const short get_yPosition() const;
         const int get_xlimit() const;
         const int get_ylimit() const;
         void set_wasd(const bool newwasd);
+        
 };
 
 #endif
