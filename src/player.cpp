@@ -108,7 +108,7 @@ Player::Player(sf::Sprite* m, sf::Texture& Texture1)
 :main_sprite{m}, current_position{1,1}, level{1}, wasd{false}
 {
     main_sprite->setTexture(Texture1);
-    main_sprite->setScale(0.105, 0.105);
+    main_sprite->setScale(player_scale, player_scale);
     main_sprite->setOrigin(main_sprite->getLocalBounds().width / 2.f, main_sprite->getLocalBounds().height / 2.f);  
     main_sprite->setPosition(get_xlimit() ,SCRHEIGHT - get_ylimit()); 
 }
@@ -167,3 +167,15 @@ void Player::set_wasd(const bool newwasd){
 }
 
 Player::~Player(){};
+
+const position Player::get_pos() const{
+    return current_position;
+}
+
+const int Player::get_width() const{
+    return main_sprite->getTexture()->getSize().x  * main_sprite->getScale().x;
+}
+
+const int Player::get_height() const{
+    return main_sprite->getTexture()->getSize().y  * main_sprite->getScale().y;
+}

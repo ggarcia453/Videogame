@@ -5,6 +5,7 @@
 #include "inc/player.hpp"
 #include "inc/constants.hpp"
 #include "inc/settings.hpp"
+#include "inc/items.hpp"
 #include <thread>
 sf::Mutex mutex;
 
@@ -148,6 +149,8 @@ int main(int argc, char* argv[]) {
   t1.wait();
   t2.wait();
   t3.wait();
+  Sprite2.setTexture(Texture2);
+  Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6});
   while (window.isOpen()){
     sf::Event event;
     while (window.pollEvent(event)){
@@ -201,6 +204,7 @@ int main(int argc, char* argv[]) {
           main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());
+          key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width());
           window.draw(text6);
           window.display();
           break;

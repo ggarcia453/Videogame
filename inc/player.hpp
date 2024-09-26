@@ -2,11 +2,7 @@
 #define PLAYER_HPP
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
-struct position{
-    short x;
-    short y;
-};
+#include "constants.hpp"
 
 class Player{
     private:
@@ -18,8 +14,6 @@ class Player{
         void move_arrows();
         void move_wasd();
         bool wasd;
-        const float get_x() const;
-        const float get_y() const;
         
     public:
 
@@ -33,7 +27,11 @@ class Player{
         const int get_xlimit() const;
         const int get_ylimit() const;
         void set_wasd(const bool newwasd);
-        
+        const position get_pos() const;
+        const float get_x() const;
+        const float get_y() const;
+        const int get_width() const;
+        const int get_height() const;
 };
 
 #endif
