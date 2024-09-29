@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../inc/constants.hpp"
 #include <SFML/Window/Keyboard.hpp>
+#include <algorithm>
 
 void Player::move_arrows() {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
@@ -105,7 +106,7 @@ void Player::bound_check(){
 }
 
 Player::Player(sf::Sprite* m, sf::Texture& Texture1)
-:main_sprite{m}, current_position{1,1}, level{1}, wasd{false}
+:main_sprite{m}, current_position{1,1}, level{1}, wasd{false}, itemholder{}
 {
     main_sprite->setTexture(Texture1);
     main_sprite->setScale(player_scale, player_scale);
@@ -178,4 +179,13 @@ const int Player::get_width() const{
 
 const int Player::get_height() const{
     return main_sprite->getTexture()->getSize().y  * main_sprite->getScale().y;
+}
+
+
+void Player::add_item(Item* item){
+    itemholder.push_back(*item);
+}
+
+bool Player::holding_item(Item* item){
+    return std::find(itemholder.begin(), itemholder.end(), *item) != itemholder.end();
 }

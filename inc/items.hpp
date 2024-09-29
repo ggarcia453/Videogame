@@ -16,7 +16,8 @@ class Item{
     public:
         Item(sf::Sprite* s, position screen, position map);    
         const bool show() const;
-        void draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width) ;
+        bool draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width);
+        bool operator==(const Item& rhs) const;
         
 };
 

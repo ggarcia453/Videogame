@@ -20,11 +20,20 @@ bool Item::collision_detection(float x, float y, const int height, const int wid
     return (screen_pos.x < x + width && screen_pos.x + thiswidth > x && screen_pos.y < y + height && screen_pos.y + thisheight > y);
 }
 
-void Item::draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width) {
+bool Item::draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width) {
+    if (!visible){
+        return false;
+    }
     if (map.x ==map_pos.x & map.y == map_pos.y){
         visible = visible & !collision_detection(x,y, height, width);
         if (visible){
             w->draw(*sprite);
         }
+        return !visible;
     }
+    return false;
+}
+
+bool Item::operator==(const Item& rhs) const{
+    return this->sprite == rhs.sprite;
 }

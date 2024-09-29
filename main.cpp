@@ -81,13 +81,7 @@ int main(int argc, char* argv[]) {
   sf::Sprite Sprite2;
   bool buffer = false;
   const std:: string ast_path = "../assets/";
-  if (!Titlemusic.openFromFile(ast_path + "music/fnaf_title.ogg")){
-    return -1;
-  }
   if (!font.loadFromFile(ast_path + "fonts/font.ttf")){
-    return -1;
-  }
-  if (!Gamemusic.openFromFile(ast_path + "music/bonnie.ogg")){
     return -1;
   }
   if (!Texture1.loadFromFile(ast_path + "img/kfc_goku.jpg")){
@@ -129,6 +123,7 @@ int main(int argc, char* argv[]) {
   sf::Thread t7(std::bind(&string_setup, &text7, "M to change music. Its On", font, sf::Vector2f(SCRWIDTH/2.0f, SCRHEIGHT/2.0f - SCRHEIGHT/5.0f + 2)));
   t7.launch();
 
+  //text8
   sf::Thread t8(std::bind(&string_setup, &text8, "W to play with WASD", font, sf::Vector2f(SCRWIDTH/2.0f, SCRHEIGHT/2.0f)));
   t8.launch();
 
@@ -138,7 +133,13 @@ int main(int argc, char* argv[]) {
   t6.launch();
   // string_setup(&text6, pos_string, font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f));
 
-  //Titlemusic set up  
+  //Titlemusic and Gamemusic set up  
+  if (!Titlemusic.openFromFile(ast_path + "music/fnaf_title.ogg")){
+    return -1;
+  }
+  if (!Gamemusic.openFromFile(ast_path + "music/bonnie.ogg")){
+    return -1;
+  }
   Titlemusic.setLoop(true);
   Titlemusic.play();
   Gamemusic.setLoop(true);
@@ -149,8 +150,11 @@ int main(int argc, char* argv[]) {
   t1.wait();
   t2.wait();
   t3.wait();
+
+  //Key Item setup
   Sprite2.setTexture(Texture2);
   Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6});
+  
   while (window.isOpen()){
     sf::Event event;
     while (window.pollEvent(event)){
@@ -204,7 +208,17 @@ int main(int argc, char* argv[]) {
           main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());
-          key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width());
+          if (key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width())){
+            main_character.add_item(&key);
+          }
+          if (main_character.get_xPosition() == 10 && main_character.get_yPosition() == 10){
+            if (main_character.holding_item(&key)){
+              text1.setString("Moving onto Level 2");
+            }else{
+              text1.setString("Go get the key");
+            }
+            window.draw(text1);
+          }
           window.draw(text6);
           window.display();
           break;

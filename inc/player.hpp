@@ -2,7 +2,9 @@
 #define PLAYER_HPP
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 #include "constants.hpp"
+#include "items.hpp"
 
 class Player{
     private:
@@ -14,6 +16,7 @@ class Player{
         void move_arrows();
         void move_wasd();
         bool wasd;
+        std::vector<Item> itemholder;
         
     public:
 
@@ -32,6 +35,8 @@ class Player{
         const float get_y() const;
         const int get_width() const;
         const int get_height() const;
+        void add_item(Item* item);
+        bool holding_item(Item* item);
 };
 
 #endif
