@@ -106,7 +106,7 @@ void Player::bound_check(){
 }
 
 Player::Player(sf::Sprite* m, sf::Texture& Texture1)
-:main_sprite{m}, current_position{1,1}, level{1}, wasd{false}, itemholder{}
+:main_sprite{m}, current_position{1,1}, wasd{false}, itemholder{}
 {
     main_sprite->setTexture(Texture1);
     main_sprite->setScale(player_scale, player_scale);
@@ -114,7 +114,7 @@ Player::Player(sf::Sprite* m, sf::Texture& Texture1)
     main_sprite->setPosition(get_xlimit() ,SCRHEIGHT - get_ylimit()); 
 }
 Player::Player()
-:main_sprite{nullptr}, current_position{1,1}, level{1}, wasd{false}
+:main_sprite{nullptr}, current_position{1,1}, wasd{false}
 {
 
 }
@@ -188,4 +188,9 @@ void Player::add_item(Item* item){
 
 bool Player::holding_item(Item* item){
     return std::find(itemholder.begin(), itemholder.end(), *item) != itemholder.end();
+}
+void Player::level_up(){
+    main_sprite->setPosition(get_xlimit() ,SCRHEIGHT - get_ylimit()); 
+    current_position.x = 1;
+    current_position.y = 1;
 }

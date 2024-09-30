@@ -9,6 +9,13 @@
 #include <thread>
 sf::Mutex mutex;
 
+bool progress_handler(short* level, Player* main_character, std::vector<Item> item_list){
+  if (*level == 1 && main_character->holding_item(&item_list.at(0))){
+    return true;
+  }
+  return false;
+}
+
 States state_handler(States current, sf::Keyboard::Key key){
   if (key == sf::Keyboard::Escape){
     switch (current){
@@ -147,6 +154,10 @@ int main(int argc, char* argv[]) {
   //State Setup
   States curState = TitleScreen;
   States nextState = TitleScreen;
+  short level = 1;
+  std::string next_level;
+  bool progressed = false;
+  bool can_progress = false;
   t1.wait();
   t2.wait();
   t3.wait();
@@ -154,6 +165,8 @@ int main(int argc, char* argv[]) {
   //Key Item setup
   Sprite2.setTexture(Texture2);
   Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6});
+  std::vector<Item> item_list;
+  item_list.push_back(key);
   
   while (window.isOpen()){
     sf::Event event;
@@ -165,6 +178,11 @@ int main(int argc, char* argv[]) {
           main_character.set_wasd(settings.CharMove());
         }
         nextState = state_handler(curState, event.key.code);
+        if (event.key.code == sf::Keyboard::Enter && progressed){
+          main_character.level_up();
+          progressed = false;
+          level ++;
+        }
       }
     }
     switch (curState){
@@ -211,11 +229,14 @@ int main(int argc, char* argv[]) {
           if (key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width())){
             main_character.add_item(&key);
           }
+          can_progress = progress_handler(&level, &main_character, item_list);
           if (main_character.get_xPosition() == 10 && main_character.get_yPosition() == 10){
-            if (main_character.holding_item(&key)){
-              text1.setString("Moving onto Level 2");
+            if (can_progress){
+              progressed = true;
+              next_level = "Enter -> Level " + std::to_string(level  + 1);
+              text1.setString(next_level);
             }else{
-              text1.setString("Go get the key");
+              text1.setString("Go get the items");
             }
             window.draw(text1);
           }

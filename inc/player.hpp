@@ -12,7 +12,6 @@ class Player{
         sf::Sprite* main_sprite;
         void bound_check();
         void update_position(const short x, const short y);
-        short level;
         void move_arrows();
         void move_wasd();
         bool wasd;
@@ -37,6 +36,7 @@ class Player{
         const int get_height() const;
         void add_item(Item* item);
         bool holding_item(Item* item);
+        void level_up();
 };
 
 #endif
