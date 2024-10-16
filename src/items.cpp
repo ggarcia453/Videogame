@@ -2,8 +2,8 @@
 #include "../inc/constants.hpp"
 #include "iostream"
 
-Item::Item(sf::Sprite* s, position screen, position map)
-:sprite{s}, visible{true}, screen_pos{screen}, map_pos{map}
+Item::Item(sf::Sprite* s, position screen, position map, short level)
+:sprite{s}, visible{true}, screen_pos{screen}, map_pos{map}, level{level}
 {
     s->setScale(item_scale, item_scale);
     s->setOrigin(s->getLocalBounds().width / 2.f, s->getLocalBounds().height / 2.f);  
@@ -20,8 +20,11 @@ bool Item::collision_detection(float x, float y, const int height, const int wid
     return (screen_pos.x < x + width && screen_pos.x + thiswidth > x && screen_pos.y < y + height && screen_pos.y + thisheight > y);
 }
 
-bool Item::draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width) {
+bool Item::draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width, short currentLevel){
     if (!visible){
+        return false;
+    }
+    if (currentLevel != this->level){
         return false;
     }
     if (map.x ==map_pos.x & map.y == map_pos.y){

@@ -13,6 +13,9 @@ bool progress_handler(short* level, Player* main_character, std::vector<Item> it
   if (*level == 1 && main_character->holding_item(&item_list.at(0))){
     return true;
   }
+  if (*level == 2 && main_character->holding_item(&item_list.at(1))){
+    return true;
+  }
   return false;
 }
 
@@ -164,9 +167,11 @@ int main(int argc, char* argv[]) {
 
   //Key Item setup
   Sprite2.setTexture(Texture2);
-  Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6});
+  Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6}, 1);
+  Item key2(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {9,1}, 2);
   std::vector<Item> item_list;
   item_list.push_back(key);
+  item_list.push_back(key2);
   
   while (window.isOpen()){
     sf::Event event;
@@ -226,8 +231,11 @@ int main(int argc, char* argv[]) {
           main_character.move();
           window.clear();
           window.draw(main_character.get_sprite());
-          if (key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width())){
+          if (key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width(), level)){
             main_character.add_item(&key);
+          }
+          if (key2.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width(), level)){
+            main_character.add_item(&key2);
           }
           can_progress = progress_handler(&level, &main_character, item_list);
           if (main_character.get_xPosition() == 10 && main_character.get_yPosition() == 10){

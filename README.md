@@ -21,6 +21,9 @@ Code related to Settings class. THe Settings hadnles all settings for the game a
 ## main.cpp
 The main driver code for the program. 
 
+## Test Folder
+Code related to background tests I developed. These help ensure all of the parts are working properly. 
+
 # Future Plans
 1. Items to grab on maze to advance levels. 
 2. Future levels
