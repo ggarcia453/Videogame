@@ -9,7 +9,39 @@
 #include <thread>
 sf::Mutex mutex;
 
-bool progress_handler(short* level, Player* main_character, std::vector<Item> item_list){
+Settings settings;
+sf::Music Titlemusic;
+sf::Music Gamemusic;
+sf::Font font;
+sf::Text text1;
+sf::Text text2;
+sf::Text text3;
+sf::Text text4;
+sf::Text text5;
+sf::Text text6;
+sf::Text text7;
+sf::Text text8;
+sf::Texture Texture1;
+sf::Sprite Sprite1;
+sf::Texture Texture2;
+sf::Sprite Sprite2;
+sf::Texture Background1;
+sf::Sprite BackgroundSprite;
+std::vector<Item> item_list;
+
+//State Setup
+States curState = TitleScreen;
+States nextState = TitleScreen;
+short level = 1;
+std::string next_level;
+bool progressed = false;
+bool can_progress = false;
+
+void changeBackground(){
+
+}
+
+bool progress_handler(short* level, Player* main_character){
   if (*level == 1 && main_character->holding_item(&item_list.at(0))){
     return true;
   }
@@ -73,23 +105,6 @@ void string_setup(sf::Text* text, std::string message, sf::Font& font, sf::Vecto
 
 int main(int argc, char* argv[]) {
   //Initialize assets and Load from assets folder
-  Settings settings;
-  sf::Music Titlemusic;
-  sf::Music Gamemusic;
-  sf::Font font;
-  sf::Text text1;
-  sf::Text text2;
-  sf::Text text3;
-  sf::Text text4;
-  sf::Text text5;
-  sf::Text text6;
-  sf::Text text7;
-  sf::Text text8;
-  sf::Texture Texture1;
-  sf::Sprite Sprite1;
-  sf::Texture Texture2;
-  sf::Sprite Sprite2;
-  bool buffer = false;
   const std:: string ast_path = "../assets/";
   if (!font.loadFromFile(ast_path + "fonts/font.ttf")){
     return -1;
@@ -100,6 +115,11 @@ int main(int argc, char* argv[]) {
   if (!Texture2.loadFromFile(ast_path + "img/key.jpg")){
     return -1;
   }
+  if (!Background1.loadFromFile(ast_path + "img/windows.jpg")){
+    return -1;
+  }
+  BackgroundSprite.setTexture(Background1);
+  BackgroundSprite.setScale(0.5,0.65);
 
   //Window set up
   sf::RenderWindow window(sf::VideoMode(SCRWIDTH, SCRHEIGHT), "videogame");
@@ -153,14 +173,7 @@ int main(int argc, char* argv[]) {
   Titlemusic.setLoop(true);
   Titlemusic.play();
   Gamemusic.setLoop(true);
-
-  //State Setup
-  States curState = TitleScreen;
-  States nextState = TitleScreen;
-  short level = 1;
-  std::string next_level;
-  bool progressed = false;
-  bool can_progress = false;
+  
   t1.wait();
   t2.wait();
   t3.wait();
@@ -169,7 +182,6 @@ int main(int argc, char* argv[]) {
   Sprite2.setTexture(Texture2);
   Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6}, 1);
   Item key2(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {9,1}, 2);
-  std::vector<Item> item_list;
   item_list.push_back(key);
   item_list.push_back(key2);
   
@@ -230,6 +242,7 @@ int main(int argc, char* argv[]) {
           text6.setString(std::to_string(main_character.get_xPosition()) + "," + std::to_string(main_character.get_yPosition()));
           main_character.move();
           window.clear();
+          window.draw(BackgroundSprite);
           window.draw(main_character.get_sprite());
           if (key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width(), level)){
             main_character.add_item(&key);
@@ -237,7 +250,7 @@ int main(int argc, char* argv[]) {
           if (key2.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width(), level)){
             main_character.add_item(&key2);
           }
-          can_progress = progress_handler(&level, &main_character, item_list);
+          can_progress = progress_handler(&level, &main_character);
           if (main_character.get_xPosition() == 10 && main_character.get_yPosition() == 10){
             if (can_progress){
               progressed = true;
