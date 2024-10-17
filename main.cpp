@@ -7,6 +7,7 @@
 #include "inc/settings.hpp"
 #include "inc/items.hpp"
 #include <thread>
+#include <stdlib.h>
 sf::Mutex mutex;
 
 Settings settings;
@@ -26,6 +27,7 @@ sf::Sprite Sprite1;
 sf::Texture Texture2;
 sf::Sprite Sprite2;
 sf::Texture Background1;
+sf::Texture Background2;
 sf::Sprite BackgroundSprite;
 std::vector<Item> item_list;
 
@@ -37,8 +39,19 @@ std::string next_level;
 bool progressed = false;
 bool can_progress = false;
 
-void changeBackground(){
+void drawAllItems(sf::RenderWindow* w, Player* main_character){
+  for (auto& ittem: item_list){
+    if (ittem.draw(w, main_character->get_pos(), main_character->get_x(), main_character->get_y(), main_character->get_height(), main_character->get_width(), level)){
+      main_character->add_item(&ittem);
+    }
+  }
+}
 
+void changeBackground(short level){
+  if (level== 3){
+    BackgroundSprite.setTexture(Background2);
+    BackgroundSprite.setScale(0.5,1.2);
+  }
 }
 
 bool progress_handler(short* level, Player* main_character){
@@ -104,6 +117,7 @@ void string_setup(sf::Text* text, std::string message, sf::Font& font, sf::Vecto
 }
 
 int main(int argc, char* argv[]) {
+  srand(time(NULL)); 
   //Initialize assets and Load from assets folder
   const std:: string ast_path = "../assets/";
   if (!font.loadFromFile(ast_path + "fonts/font.ttf")){
@@ -118,6 +132,10 @@ int main(int argc, char* argv[]) {
   if (!Background1.loadFromFile(ast_path + "img/windows.jpg")){
     return -1;
   }
+  if (!Background2.loadFromFile(ast_path + "img/windows2.jpg")){
+    return -1;
+  }
+
   BackgroundSprite.setTexture(Background1);
   BackgroundSprite.setScale(0.5,0.65);
 
@@ -181,7 +199,9 @@ int main(int argc, char* argv[]) {
   //Key Item setup
   Sprite2.setTexture(Texture2);
   Item key(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {6,6}, 1);
-  Item key2(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {9,1}, 2);
+  // Item key2(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, {1,1}, 2);
+  position key2pos = {static_cast<short>(rand()%10 + 1),static_cast<short>(rand()%10 + 1)};
+  Item key2(&Sprite2, {SCRWIDTH / 2, SCRHEIGHT / 2}, key2pos, 2);
   item_list.push_back(key);
   item_list.push_back(key2);
   
@@ -199,6 +219,7 @@ int main(int argc, char* argv[]) {
           main_character.level_up();
           progressed = false;
           level ++;
+          changeBackground(level);
         }
       }
     }
@@ -244,12 +265,7 @@ int main(int argc, char* argv[]) {
           window.clear();
           window.draw(BackgroundSprite);
           window.draw(main_character.get_sprite());
-          if (key.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width(), level)){
-            main_character.add_item(&key);
-          }
-          if (key2.draw(&window, main_character.get_pos(), main_character.get_x(), main_character.get_y(), main_character.get_height(), main_character.get_width(), level)){
-            main_character.add_item(&key2);
-          }
+          drawAllItems(&window, &main_character);
           can_progress = progress_handler(&level, &main_character);
           if (main_character.get_xPosition() == 10 && main_character.get_yPosition() == 10){
             if (can_progress){

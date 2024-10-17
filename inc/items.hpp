@@ -21,9 +21,5 @@ class Item{
         
 };
 
-class knapsack{
-
-};
-
 
 #endif

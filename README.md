@@ -4,7 +4,7 @@ it is a videogame where you, the player, must traverse through various levels of
 Currently, this project is still under development. 
 
 # Overview of Files
-This section gives a brief runtrhough of the files content. More sophiscated documentation will be available in each file. 
+This section gives a brief runthrough of the files content. More sophiscated documentation will be available in each file. 
 ## Constants.hpp
 Constants and Enums used across different files. 
 
