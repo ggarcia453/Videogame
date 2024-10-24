@@ -14,6 +14,8 @@ class Player{
         void update_position(const short x, const short y);
         void move_arrows();
         void move_wasd();
+        void move_arrows(sf::Keyboard::Key key);
+        void move_wasd(sf::Keyboard::Key key);
         bool wasd;
         std::vector<Item> itemholder;
         
@@ -24,6 +26,7 @@ class Player{
         ~Player();
         const sf::Sprite get_sprite() const;
         void move();
+        void move_test(sf::Keyboard::Key key);
         const short get_xPosition() const;
         const short get_yPosition() const;
         const int get_xlimit() const;

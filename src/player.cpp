@@ -38,6 +38,44 @@ void Player::move_arrows() {
     }
     bound_check();
 }
+void Player::move_arrows(sf::Keyboard::Key key){
+    switch (key){
+        case sf::Keyboard::Up:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(0,-0.75);
+             } else{
+                main_sprite->move(0,-0.25);
+            }
+            break;
+        case sf::Keyboard::Down:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(0,0.75);
+            }
+            else{
+                main_sprite->move(0,0.25);
+            }
+            break;
+        case sf::Keyboard::Left:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(-0.75,0);
+            }   
+            else{
+                main_sprite->move(-0.25,0);
+            }
+            break;
+        case sf::Keyboard::Right:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(0.75,0);
+            }
+            else{
+                main_sprite->move(0.25,0);
+            }
+            break;
+        default:
+            break;
+    }
+    bound_check();
+}
 
 void Player::move_wasd(){
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
@@ -70,6 +108,45 @@ void Player::move_wasd(){
         else{
             main_sprite->move(0.25,0);
         }
+    }
+    bound_check();
+}
+
+void Player::move_wasd(sf::Keyboard::Key key){
+    switch (key){
+        case sf::Keyboard::W:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(0,-0.75);
+             } else{
+                main_sprite->move(0,-0.25);
+            }
+            break;
+        case sf::Keyboard::S:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(0,0.75);
+            }
+            else{
+                main_sprite->move(0,0.25);
+            }
+            break;
+        case sf::Keyboard::A:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(-0.75,0);
+            }   
+            else{
+                main_sprite->move(-0.25,0);
+            }
+            break;
+        case sf::Keyboard::D:
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+                main_sprite->move(0.75,0);
+            }
+            else{
+                main_sprite->move(0.25,0);
+            }
+            break;
+        default:
+            break;
     }
     bound_check();
 }
@@ -138,6 +215,15 @@ void Player::move(){
     }
     else{
         move_arrows();
+    }
+}
+
+void Player::move_test(sf::Keyboard::Key key){
+    if (wasd){
+        move_wasd(key);
+    }
+    else{
+        move_arrows(key);
     }
 }
 
