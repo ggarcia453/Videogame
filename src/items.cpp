@@ -40,3 +40,7 @@ bool Item::draw(sf::RenderWindow* w, position map, float x, float y, const int h
 bool Item::operator==(const Item& rhs) const{
     return this->sprite == rhs.sprite;
 }
+
+bool Item::operator!=(const Item& rhs) const{
+    return this->sprite != rhs.sprite;
+}

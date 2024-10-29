@@ -18,7 +18,7 @@ class Item{
         const bool show() const;
         bool draw(sf::RenderWindow* w, position map, float x, float y, const int height, const int width, short currentLevel);
         bool operator==(const Item& rhs) const;
-        
+        bool operator!=(const Item& rhs) const;
 };
 
 

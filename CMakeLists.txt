@@ -70,7 +70,7 @@ FetchContent_MakeAvailable(googletest)
 
 
 enable_testing()  
-set(TEST_FILES test/backendtests.cpp test/playertests.cpp test/settingtests.cpp)
+set(TEST_FILES test/backendtests.cpp test/playertests.cpp test/settingtests.cpp test/itemtests.cpp)
 add_executable(
   tester
   ${TEST_FILES}
