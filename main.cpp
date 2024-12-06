@@ -84,7 +84,9 @@ States state_handler(States current, sf::Keyboard::Key key){
       case PauseScreen:
         return TitleScreen;
       case TitleScreen:
-        return Questions;    
+        return Questions;
+      case TutorialScreen:
+        return TitleScreen; 
     default:
       return current;
     }
@@ -93,6 +95,8 @@ States state_handler(States current, sf::Keyboard::Key key){
     switch (current)
     {
     case TitleScreen:
+      return TutorialScreen;
+    case TutorialScreen:
       return GameScreen;
     default:
       return current;
@@ -156,11 +160,6 @@ int main(int argc, char* argv[]) {
   sf::Thread t3(std::bind(&string_setup, &text3, "Q to Question????", font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/3.0f)));
   t3.launch();
   // string_setup(&text3, "Q to Question????", font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/3.0f));
-
-  //test4 setup
-  sf::Thread t4(std::bind(&string_setup, &text4, "Settings", font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f - SCRHEIGHT/4.0f)));
-  t4.launch();
-  // string_setup(&text4, "Settings", font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f - SCRHEIGHT/4.0f));
 
   //text5 setup
   sf::Thread t5(std::bind(&string_setup,&text5, "Esc to stop questions", font, sf::Vector2f(SCRWIDTH/2.0f,SCRHEIGHT/2.0f + SCRHEIGHT/4.0f) ));
@@ -237,6 +236,7 @@ int main(int argc, char* argv[]) {
           window.display();
           break;
         case Questions:
+          text1.setString("Settings");
           if(Titlemusic.getStatus() == 2){Titlemusic.pause();}
           if (settings.playMusic()){
             text7.setString("M to change music. Its On");
@@ -251,11 +251,24 @@ int main(int argc, char* argv[]) {
             text8.setString("W to play with arrows");
           }
           window.clear();
-          window.draw(text4);
+          window.draw(text1);
           window.draw(text5);
           window.draw(text7);
           window.draw(text8);
           window.display();
+          break;
+        case TutorialScreen:
+            text1.setString("Tutorial");
+            text5.setString("\nGrab keys to progress\nthrough levels");
+            text5.setPosition({SCRWIDTH/2 , SCRHEIGHT/2});
+            text7.setString("P to play");
+            text8.setString("Q to title screen");
+            window.clear();
+            window.draw(text1);
+            window.draw(text5);
+            window.draw(text7);
+            window.draw(text8);
+            window.display();
           break;
         case GameScreen:
           if(Titlemusic.getStatus() != 0){Titlemusic.stop();}

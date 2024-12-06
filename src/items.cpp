@@ -42,5 +42,9 @@ bool Item::operator==(const Item& rhs) const{
 }
 
 bool Item::operator!=(const Item& rhs) const{
-    return this->sprite != rhs.sprite;
+    return !(*this == rhs);
+}
+
+const position Item::get_map_pos() const{
+    return map_pos;
 }
