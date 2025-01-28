@@ -38,11 +38,11 @@ bool Item::draw(sf::RenderWindow* w, position map, float x, float y, const int h
 }
 
 bool Item::operator==(const Item& rhs) const{
-    return this->sprite == rhs.sprite;
+    return this->sprite == rhs.sprite && this->level == rhs.level;
 }
 
 bool Item::operator!=(const Item& rhs) const{
-    return !(*this == rhs);
+    return (this->sprite != rhs.sprite) || this->level != rhs.level;
 }
 
 const position Item::get_map_pos() const{
