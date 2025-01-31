@@ -28,6 +28,8 @@ sf::Texture Texture2;
 sf::Sprite Sprite2;
 sf::Texture Background1;
 sf::Texture Background2;
+sf::Texture Background3;
+sf::Texture Background4;
 sf::Sprite BackgroundSprite;
 std::vector<Item> item_list;
 
@@ -52,6 +54,12 @@ void changeBackground(short level){
     BackgroundSprite.setTexture(Background2);
     BackgroundSprite.setScale(0.5,1.2);
   }
+  else if (level == 5){
+    BackgroundSprite.setTexture(Background3);
+  }
+  else if (level == 7){
+    BackgroundSprite.setTexture(Background4);
+  }
 }
 
 bool progress_handler(short* level, Player* main_character){
@@ -59,6 +67,9 @@ bool progress_handler(short* level, Player* main_character){
     return true;
   }
   if (*level == 2 && main_character->holding_item(&item_list.at(1))){
+    return true;
+  }
+  if (*level == 3){
     return true;
   }
   return false;
@@ -139,6 +150,13 @@ int main(int argc, char* argv[]) {
   if (!Background2.loadFromFile(ast_path + "img/windows2.jpg")){
     return -1;
   }
+  if (!Background3.loadFromFile(ast_path + "img/windows3.jpg")){
+    return -1;
+  }
+  if (!Background4.loadFromFile(ast_path + "img/windows4.jpg")){
+    return -1;
+  }
+  
 
   BackgroundSprite.setTexture(Background1);
   BackgroundSprite.setScale(0.5,0.65);
