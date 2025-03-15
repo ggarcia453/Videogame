@@ -8,6 +8,7 @@
 #include "inc/items.hpp"
 #include <thread>
 #include <stdlib.h>
+#include <functional>
 sf::Mutex mutex;
 
 Settings settings;
